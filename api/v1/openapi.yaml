@@ -1,0 +1,285 @@
+openapi: 3.0.0
+
+info:
+  title: K8S agent API
+  version: 0.0.1
+
+components:
+  schemas:
+    Namespace:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Уникальное имя неймспейса
+          pattern: '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$'
+          minLength: 3
+          maxLength: 63
+          example: "my-awesome-namespace"
+        labels:
+          type: object
+          description: Метки для организации неймспейсов
+          additionalProperties:
+            type: string
+          example:
+            team: "backend"
+            tenant: "test"
+        created_at:
+          type: string
+          format: date-time
+          description: Дата и время создания
+          example: "2024-01-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Дата и время последнего обновления
+          example: "2024-01-15T14:45:00Z"
+        status:
+          type: string
+          enum: [active, terminating]
+          description: Статус неймспейса
+          example: "active"
+
+    NamespaceCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Уникальное имя неймспейса
+          pattern: '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$'
+          minLength: 3
+          maxLength: 63
+          example: "my-awesome-namespace"
+        labels:
+          type: object
+          description: Метки для организации неймспейсов
+          additionalProperties:
+            type: string
+          example:
+            team: "backend"
+            tenant: "test"
+
+    NamespaceUpdate:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Описание неймспейса
+          maxLength: 255
+          example: "Updated namespace description"
+        labels:
+          type: object
+          description: Метки для организации неймспейсов
+          additionalProperties:
+            type: string
+          example:
+            team: "backend"
+            tenant: "test"
+
+    NamespaceList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Namespace'
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: HTTP статус код
+          example: 400
+        message:
+          type: string
+          description: Описание ошибки
+          example: "Invalid namespace name"
+        description:
+          type: string
+          description: Дополнительная информация об ошибке
+          example: "Name must be 3-63 characters long"
+
+  responses:
+    NotFoundError:
+      description: Неймспейс не найден
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: "Namespace not found"
+            details: "Namespace with name my-awesome-namespace does not exist"
+
+    BadRequestError:
+      description: Неверный запрос
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: "Validation error"
+            details: "Invalid namespace name format"
+
+  parameters:
+    ForceParam:
+      name: force
+      in: query
+      description: Флаг необходимости настоятельного удаления
+      schema:
+        type: boolean
+        default: false
+      example: true
+
+    NamespaceNameParam:
+      name: namespaceName
+      in: path
+      required: true
+      description: Name неймспейса
+      schema:
+        type: string
+        format: uuid
+        example: "my-awesome-namespaces"
+
+paths:
+  /namespaces:
+    get:
+      tags:
+        - Namespaces
+      summary: Получить список неймспейсов
+      description: Возвращает список всех неймспейсов с поддержкой пагинации
+      operationId: listNamespaces
+      responses:
+        '200':
+          description: Успешный ответ со списком неймспейсов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NamespaceList'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 500
+                message: "Internal server error"
+
+    post:
+      tags:
+        - Namespaces
+      summary: Создать новый неймспейс
+      description: Создает новый неймспейс с указанными параметрами
+      operationId: createNamespace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NamespaceCreate'
+      responses:
+        '201':
+          description: Неймспейс успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Namespace'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '409':
+          description: Конфликт - неймспейс с таким именем уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 409
+                message: "Namespace already exists"
+                details: "Namespace with name 'my-awesome-namespace' already exists"
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /namespaces/{namespaceName}:
+    get:
+      tags:
+        - Namespaces
+      summary: Получить неймспейс по его имени
+      description: Возвращает информацию о конкретном неймспейсе
+      operationId: getNamespace
+      parameters:
+        - $ref: '#/components/parameters/NamespaceNameParam'
+      responses:
+        '200':
+          description: Успешный ответ с информацией о неймспейсе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Namespace'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          description: Внутренняя ошибка сервера
+
+    put:
+      tags:
+        - Namespaces
+      summary: Обновить неймспейс
+      description: Полностью обновляет информацию о неймспейсе
+      operationId: updateNamespace
+      parameters:
+        - $ref: '#/components/parameters/NamespaceNameParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NamespaceUpdate'
+      responses:
+        '200':
+          description: Неймспейс успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Namespace'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          description: Внутренняя ошибка сервера
+
+    delete:
+      tags:
+        - Namespaces
+      summary: Удалить неймспейс
+      description: Удаляет существующий неймспейс
+      operationId: deleteNamespace
+      parameters:
+        - $ref: '#/components/parameters/NamespaceNameParam'
+      responses:
+        '204':
+          description: Неймспейс успешно удален (нет содержимого)
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          description: Конфликт - неймспейс не может быть удален (например, содержит ресурсы)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 409
+                message: "Namespace cannot be deleted"
+                details: "Namespace contains active resources"
+        '500':
+          description: Внутренняя ошибка сервера
