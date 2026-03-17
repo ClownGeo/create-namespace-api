@@ -1,0 +1,11 @@
+version: '3'
+
+tasks:
+  generate-api:
+    desc: Генерация api сервера
+    cmds:
+      - oapi-codegen --config=oapi-codegen.yaml api/v1/openapi.yaml
+  run-dev-server:
+    desc: Запуск приложения
+    cmds:
+      - go run cmd/server/main.go

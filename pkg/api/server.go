@@ -90,15 +90,16 @@ func (s Server) CreateNamespace(ctx context.Context, request CreateNamespaceRequ
 
 func (s Server) DeleteNamespace(ctx context.Context, request DeleteNamespaceRequestObject) (DeleteNamespaceResponseObject, error) {
 
-	//_, err := s.clientset.CoreV1().Namespaces().Delete(
-	//	ctx,
-	//	request.NamespaceName,
-	//	metav1.DeleteOptions{},
-	//)
-	//if err != nil {
-	//	log.Error(err.Error())
-	//	return CreateNamespace500Response{}, nil
-	//}
+	err := s.clientset.CoreV1().Namespaces().Delete(
+		ctx,
+		request.NamespaceName,
+		metav1.DeleteOptions{},
+	)
+
+	if err != nil {
+		log.Error(err.Error())
+		return DeleteNamespace500Response{}, nil
+	}
 
 	return DeleteNamespace204Response{}, nil
 }

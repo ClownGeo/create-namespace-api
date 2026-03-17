@@ -1,0 +1,115 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1773703698195
+  modified: 1773703698195
+  description: ""
+collection:
+  - url: http://127.0.0.1:8080/namespaces
+    name: Create namespace
+    meta:
+      id: req_af3089bf46cd4178929a82a94ab05580
+      created: 1773703750858
+      modified: 1773704681866
+      isPrivate: false
+      description: ""
+      sortKey: -1773703750858
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "my-awesome-namespace",
+          "labels": {
+            "team": "backend",
+            "tenant": "test"
+          }
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:8080/namespaces
+    name: Get namespaces
+    meta:
+      id: req_5040f8298bee4ed3b1b8c3cabc0938c8
+      created: 1773704647746
+      modified: 1773704671735
+      isPrivate: false
+      description: ""
+      sortKey: -1773704647746
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://127.0.0.1:8080/namespaces/my-awesome-namespace
+    name: Delete namespace
+    meta:
+      id: req_0fb1a68d6480448c8ed369d659da2e61
+      created: 1773706483510
+      modified: 1773706510153
+      isPrivate: false
+      description: ""
+      sortKey: -1773703750808
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "my-awesome-namespace",
+          "labels": {
+            "team": "backend",
+            "tenant": "test"
+          }
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1773703741045
+    modified: 1773703741045
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1773703741044
+    modified: 1773703741044
+    isPrivate: false

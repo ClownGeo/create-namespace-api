@@ -13,7 +13,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime"
 	strictecho "github.com/oapi-codegen/runtime/strictmiddleware/echo"
-	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
 // Defines values for NamespaceStatus.
@@ -91,7 +90,7 @@ type NamespaceUpdate struct {
 }
 
 // NamespaceNameParam defines model for NamespaceNameParam.
-type NamespaceNameParam = openapi_types.UUID
+type NamespaceNameParam = string
 
 // BadRequestError defines model for BadRequestError.
 type BadRequestError = Error
@@ -153,7 +152,7 @@ func (w *ServerInterfaceWrapper) DeleteNamespace(ctx echo.Context) error {
 	// ------------- Path parameter "namespaceName" -------------
 	var namespaceName NamespaceNameParam
 
-	err = runtime.BindStyledParameterWithOptions("simple", "namespaceName", ctx.Param("namespaceName"), &namespaceName, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "uuid"})
+	err = runtime.BindStyledParameterWithOptions("simple", "namespaceName", ctx.Param("namespaceName"), &namespaceName, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter namespaceName: %s", err))
 	}
@@ -169,7 +168,7 @@ func (w *ServerInterfaceWrapper) GetNamespace(ctx echo.Context) error {
 	// ------------- Path parameter "namespaceName" -------------
 	var namespaceName NamespaceNameParam
 
-	err = runtime.BindStyledParameterWithOptions("simple", "namespaceName", ctx.Param("namespaceName"), &namespaceName, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "uuid"})
+	err = runtime.BindStyledParameterWithOptions("simple", "namespaceName", ctx.Param("namespaceName"), &namespaceName, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter namespaceName: %s", err))
 	}
@@ -185,7 +184,7 @@ func (w *ServerInterfaceWrapper) UpdateNamespace(ctx echo.Context) error {
 	// ------------- Path parameter "namespaceName" -------------
 	var namespaceName NamespaceNameParam
 
-	err = runtime.BindStyledParameterWithOptions("simple", "namespaceName", ctx.Param("namespaceName"), &namespaceName, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "uuid"})
+	err = runtime.BindStyledParameterWithOptions("simple", "namespaceName", ctx.Param("namespaceName"), &namespaceName, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter namespaceName: %s", err))
 	}
