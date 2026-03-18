@@ -5,7 +5,10 @@
 brew install go-task
 ```
 
-Коллекция для теста  
+
+
+Коллекции для теста  
+[ns-manager.postman_collection.json](test/ns-manager.postman_collection.json)
 [Insomnia_collection.yaml](test/Insomnia_collection.yaml)
 
 P.S. Референсы:  
