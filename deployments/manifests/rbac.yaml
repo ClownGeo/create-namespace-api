@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ns-manager-sa
+  namespace: app-ns-manager
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ns-manager-role
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["create", "delete", "get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ns-manager-binding
+subjects:
+  - kind: ServiceAccount
+    name: ns-manager-sa
+    namespace: app-ns-manager
+roleRef:
+  kind: ClusterRole
+  name: ns-manager-role
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ns-manager
+  namespace: app-ns-manager
+spec:
+  selector:
+    matchLabels:
+      app: ns-manager
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ns-manager
+    spec:
+      serviceAccountName: ns-manager-sa
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+      - name: ns-manager
+        image: ghcr.io/clowngeo/ns-manager:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ns-manager
+  namespace: app-ns-manager
+spec:
+  selector:
+    app: ns-manager
+  ports:
+  - port: 80
+    targetPort: 8080

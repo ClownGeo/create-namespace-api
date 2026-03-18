@@ -2,14 +2,12 @@ package api
 
 import (
 	"context"
-	"path/filepath"
 
 	"github.com/labstack/gommon/log"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/util/homedir"
+	"k8s.io/client-go/rest"
 )
 
 type Server struct {
@@ -18,16 +16,24 @@ type Server struct {
 
 func NewServer() Server {
 	// local
-	var kubeconfig string
-	if home := homedir.HomeDir(); home != "" {
-		kubeconfig = filepath.Join(home, ".kube", "config")
-	}
+	//var kubeconfig string
+	//if home := homedir.HomeDir(); home != "" {
+	//	kubeconfig = filepath.Join(home, ".kube", "config")
+	//}
+	//
+	//config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
+	//if err != nil {
+	//	log.Error(err.Error())
+	//	panic(err.Error())
+	//}
 
-	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
+	// k8s
+	config, err := rest.InClusterConfig()
 	if err != nil {
 		log.Error(err.Error())
 		panic(err.Error())
 	}
+	//
 
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
@@ -43,7 +49,7 @@ func NewServer() Server {
 func namespaceFromV1Namespace(namespace *corev1.Namespace) *Namespace {
 	return &Namespace{
 		CreatedAt: &namespace.CreationTimestamp.Time,
-		Labels:    &namespace.Labels,
+		Labels:    namespace.Labels,
 		Name:      namespace.Name,
 		Status:    (*NamespaceStatus)(&namespace.Status.Phase),
 	}
@@ -70,7 +76,7 @@ func (s Server) CreateNamespace(ctx context.Context, request CreateNamespaceRequ
 	namespaceDraft := corev1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:   request.Body.Name,
-			Labels: *request.Body.Labels,
+			Labels: request.Body.Labels,
 		},
 	}
 
@@ -82,7 +88,7 @@ func (s Server) CreateNamespace(ctx context.Context, request CreateNamespaceRequ
 
 	return CreateNamespace201JSONResponse{
 		CreatedAt: &namespace.CreationTimestamp.Time,
-		Labels:    &namespace.Labels,
+		Labels:    namespace.Labels,
 		Name:      namespace.Name,
 		Status:    (*NamespaceStatus)(&namespace.Status.Phase),
 	}, nil

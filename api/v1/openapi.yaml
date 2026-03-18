@@ -10,6 +10,7 @@ components:
       type: object
       required:
         - name
+        - labels
       properties:
         name:
           type: string
@@ -26,6 +27,7 @@ components:
           example:
             team: "backend"
             tenant: "test"
+          default: {}
         created_at:
           type: string
           format: date-time
@@ -46,6 +48,7 @@ components:
       type: object
       required:
         - name
+        - labels
       properties:
         name:
           type: string
@@ -62,6 +65,7 @@ components:
           example:
             team: "backend"
             tenant: "test"
+          default: { }
 
     NamespaceUpdate:
       type: object

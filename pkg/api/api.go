@@ -51,7 +51,7 @@ type Namespace struct {
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 
 	// Labels Метки для организации неймспейсов
-	Labels *map[string]string `json:"labels,omitempty"`
+	Labels map[string]string `json:"labels"`
 
 	// Name Уникальное имя неймспейса
 	Name string `json:"name"`
@@ -69,7 +69,7 @@ type NamespaceStatus string
 // NamespaceCreate defines model for NamespaceCreate.
 type NamespaceCreate struct {
 	// Labels Метки для организации неймспейсов
-	Labels *map[string]string `json:"labels,omitempty"`
+	Labels map[string]string `json:"labels"`
 
 	// Name Уникальное имя неймспейса
 	Name string `json:"name"`

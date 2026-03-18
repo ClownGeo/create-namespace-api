@@ -9,3 +9,8 @@ tasks:
     desc: Запуск приложения
     cmds:
       - go run cmd/server/main.go
+  build-push-latest:
+    desc: Сборка и отправка в registry
+    cmds:
+      - docker build -f ./deployments/Dockerfile -t ghcr.io/clowngeo/ns-manager:latest .
+      - docker push ghcr.io/clowngeo/ns-manager:latest
