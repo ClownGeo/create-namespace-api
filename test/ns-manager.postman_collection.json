@@ -1,0 +1,82 @@
+{
+  "info": {
+    "_postman_id": "1d9e710b-56b7-43db-9053-982e94c11f80",
+    "name": "Ns manager",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "4822422"
+  },
+  "item": [
+    {
+      "name": "list",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/namespaces",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "namespaces"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"my-awesome-namespace\",\n    \"labels\": {\n    \"team\": \"backend\",\n    \"tenant\": \"test\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/namespaces",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "namespaces"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"my-awesome-namespace\",\n    \"labels\": {\n    \"team\": \"backend\",\n    \"tenant\": \"test\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/namespaces",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "namespaces"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
